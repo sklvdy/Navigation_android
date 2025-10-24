@@ -8,19 +8,40 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 
 class ActivityB : AppCompatActivity() {
+
+    private var backgroundColor = "#87CEEB"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        if (savedInstanceState != null) {
+            backgroundColor = savedInstanceState.getString("SAVED_COLOR", "#87CEEB")
+        } else {
+            val passedColor = intent.getStringExtra("BACKGROUND_COLOR")
+            if (!passedColor.isNullOrEmpty()) {
+                backgroundColor = passedColor
+            }
+        }
+
+        createUI()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("SAVED_COLOR", backgroundColor)
+    }
+
+    private fun createUI() {
         val layout = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setBackgroundColor(Color.parseColor("#87CEEB"))
+            setBackgroundColor(Color.parseColor(backgroundColor))
             gravity = android.view.Gravity.CENTER
         }
 
         val buttonOpenC = Button(this).apply {
             text = "Open Activity C"
             textSize = 18f
-            setBackgroundColor(Color.BLUE)
+            setBackgroundColor(Color.parseColor("#005F73"))
             setTextColor(Color.WHITE)
             setPadding(50, 30, 50, 30)
             layoutParams = LinearLayout.LayoutParams(
